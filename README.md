@@ -9,7 +9,14 @@ from riemann_noise_pytorch import RiemannNoise
 class Generator(torch.nn.Module):
     def __init__(self):
         ...
-        generator = 
+        self.riemann_noise = RiemannNoise()
+        ...
+    def forward(self, x):
+        out = self.DownBlock(x)
+        out = self.resblock(out)
+        out = self.riemann_noise(out)
+        out = self.UpBlock(out)
+        return out
 ```
 
 ## Citations
