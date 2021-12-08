@@ -9,7 +9,7 @@ from riemann_noise_pytorch import RiemannNoise
 class Generator(torch.nn.Module):
     def __init__(self):
         ...
-        self.riemann_noise = RiemannNoise()
+        self.riemann_noise = RiemannNoise(128, torch.device("cuda"))
         ...
     def forward(self, x):
         out = self.DownBlock(x)
