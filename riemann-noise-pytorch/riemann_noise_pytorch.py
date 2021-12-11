@@ -29,5 +29,5 @@ class RiemannNoise(nn.Module):
         sd = self.A * s + self.b
         s = self.alpha*sd + (1 - self.alpha) + 1
         sigma = s / torch.linalg.vector_norm(s)
-        out = self.r * sigma * x + self.r * sigma * torch.rand(x.shape).to(self.device)
+        out = self.r * sigma * x + self.r * sigma * torch.normal(torch.zeros(x.shape),torch.ones(x.shape)).to(self.device)
         return out
