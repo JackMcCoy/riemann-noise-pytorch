@@ -15,10 +15,11 @@ class RiemannNoise(nn.Module):
             w = size[-1]
         else:
             raise ValueError("Module must be initialized with a valid int or tuple of ints indicating the input dimensions.")
-        self.A = nn.Parameter(torch.rand(1,h,w)).to(self.device)
-        self.b = nn.Parameter(torch.rand(1,)).to(self.device)
-        self.alpha = nn.Parameter(torch.rand(1,)).to(self.device)
-        self.r = nn.Parameter(torch.rand(1,)).to(self.device)
+        self.A = nn.Parameter(torch.rand(1,h,w))
+        self.b = nn.Parameter(torch.rand(1,))
+        self.alpha = nn.Parameter(torch.rand(1,))
+        self.r = nn.Parameter(torch.rand(1,))
+        self.noise = torch.Tensor([0]).to(device)
 
     def forward(self, x):
         N, c, h, w = x.shape
@@ -29,5 +30,5 @@ class RiemannNoise(nn.Module):
         sd = self.A * s + self.b
         s = self.alpha*sd + (1 - self.alpha) + 1
         sigma = s / torch.linalg.vector_norm(s)
-        out = self.r * sigma * x + self.r * sigma * torch.rand(x.shape).to(self.device)
+        out = self.r * sigma * x + self.r * sigma * self.noise.repeat(x.shape).normal_()
         return out
